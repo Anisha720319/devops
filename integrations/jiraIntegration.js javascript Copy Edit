@@ -1,0 +1,29 @@
+const axios = require('axios');  
+const config = require('../config/config');  
+
+async function createJiraTask(summary, description) {  
+  try {  
+    const response = await axios.post(  
+      `${config.jiraBaseURL}/rest/api/3/issue`,  
+      {  
+        fields: {  
+          project: { key: "TEST" },  
+          summary,  
+          description,  
+          issuetype: { name: "Task" },  
+        },  
+      },  
+      {  
+        auth: {  
+          username: config.jiraUser,  
+          password: config.jiraAPIToken,  
+        },  
+      }  
+    );  
+    console.log("JIRA task created:", response.data);  
+  } catch (error) {  
+    console.error("Error creating JIRA task:", error.message);  
+  }  
+}  
+
+module.exports = { createJiraTask };  
